@@ -37,6 +37,8 @@ public class Game : MonoBehaviour
 {
     public int score = 0;
     public bool isGameOver = false;
+    public bool isGameWon = false;
+    public int winScore = 10;
 
     [SerializeField]
     private GameObject shipModel;
@@ -67,7 +69,24 @@ public class Game : MonoBehaviour
         startGameButton.SetActive(true);
     }
 
-    public static void GameOver()
+
+
+	public void Update()
+	{
+        Debug.Log(score);
+
+        if (instance.score >= winScore)
+        {
+            instance.isGameWon = true;
+            WinGame();
+            Debug.Log("WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOON");
+        }
+
+
+
+	}
+
+	public static void GameOver()
     {
         instance.titleText.enabled = true;
         instance.startGameButton.SetActive(true);
@@ -79,10 +98,33 @@ public class Game : MonoBehaviour
         instance.gameOverText.enabled = true;
     }
 
+    public static void WinGame()
+    {
+        instance.titleText.enabled = true;
+        instance.startGameButton.SetActive(true);
+        instance.isGameWon = true;
+        instance.spawner.StopSpawning();
+        instance.tspawner.gameStarted = false;
+        instance.tspawner.restartTimer();
+        instance.gameOverText.text = "Game Won";
+        instance.gameOverText.enabled = true;
+    }
+
+    public void Quit()
+    {
+        #if UNITY_STANDALONE
+                Application.Quit();
+        #endif
+        #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+        #endif
+    }
+
     public void NewGame()
     {
         tspawner.gameStarted = true;
         isGameOver = false;
+        isGameWon = false;
         titleText.enabled = false;
         startGameButton.SetActive(false);
         shipModel.transform.position = new Vector3(0, -3.22f, 0);

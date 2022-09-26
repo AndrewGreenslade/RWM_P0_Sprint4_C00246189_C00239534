@@ -144,6 +144,38 @@ public class TestSuite
 
 
 
+    [UnityTest]
+    public IEnumerator gameScoreWinConditionTest()
+    {
+        //1
+        game.score = 20;
+        //2
+
+        yield return new WaitForSeconds(0.3f);
+        Assert.True(game.isGameWon);
+    }
 
 
+
+    [UnityTest]
+    public IEnumerator NewGameAfterWin()
+    {
+        //1
+        game.isGameWon = true;
+        game.NewGame();
+        //2
+        Assert.False(game.isGameWon);
+        yield return null;
+    }
+
+    //[UnityTest]
+    //public IEnumerator CloseGameAfterWin()
+    //{
+    //    //1
+    //    game.isGameWon = true;
+    //    //2
+
+    //    Assert.False(UnityEditor.EditorApplication.isPlaying);
+    //    yield return null;
+    //}
 }
